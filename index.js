@@ -23,15 +23,30 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'https://apidownloadmusicytb-production.up.railway.app', // altere para o domínio real se necessário
+        url: 'https://apidownloadmusicytb-production.up.railway.app',
       },
     ],
   },
-  apis: ['./index.js'], // importa os comentários do próprio arquivo
+  apis: ['./index.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Rota alternativa
+
+// ===== Rota de saúde =====
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Verifica se a API está no ar
+ *     responses:
+ *       200:
+ *         description: API funcionando
+ */
+app.get('/', (req, res) => {
+  res.send('API de download está online ✅');
+});
 
 // ===== Rota de Download =====
 /**
@@ -103,5 +118,5 @@ app.post('/api/baixar', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📘 Swagger disponível em: https://SEU_DOMINIO/api-docs`);
+  console.log(`📘 Swagger disponível em: http://localhost:${PORT}/api-docs`);
 });
