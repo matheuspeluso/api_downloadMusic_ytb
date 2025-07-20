@@ -42,7 +42,7 @@ const swaggerOptions = {
       description: 'API para baixar músicas do YouTube em formato MP3',
     },
     servers: [
-      { url: 'http://localhost:3000' },
+      // { url: 'http://localhost:3000' },
       { url: 'apidownloadmusicytb-production.up.railway.app' } // Substitua pelo seu domínio de produção
     ],
   },
