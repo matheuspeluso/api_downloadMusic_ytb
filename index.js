@@ -43,7 +43,7 @@ const swaggerOptions = {
     },
     servers: [
       { url: 'http://localhost:3000' },
-      { url: 'https://seu-dominio.com' } // Substitua pelo seu domínio de produção
+      { url: 'apidownloadmusicytb-production.up.railway.app' } // Substitua pelo seu domínio de produção
     ],
   },
   apis: ['./index.js'],

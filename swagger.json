@@ -5,7 +5,7 @@
     "title": "API de Download de Músicas do YouTube",
     "description": "API para baixar músicas do YouTube"
   },
-  "host": "localhost:3000",
+  "host": "apidownloadmusicytb-production.up.railway.app/",
   "basePath": "/",
   "schemes": ["http"],
   "paths": {
