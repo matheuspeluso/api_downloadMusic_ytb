@@ -8,18 +8,13 @@ const fs = require('fs');
 
 const app = express();
 
-// Configuração CORS
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
+// ===== CORS Middleware =====
+app.use(cors());
 app.use(express.json());
 
-// ========== Configuração do Swagger ==========
+// ===== Swagger Configuração =====
 const swaggerOptions = {
-  swaggerDefinition: {
+  definition: {
     openapi: '3.0.0',
     info: {
       title: 'API Download MP3 do YouTube',
@@ -27,24 +22,18 @@ const swaggerOptions = {
       description: 'API para baixar músicas do YouTube em formato MP3',
     },
     servers: [
-      { url: 'https://apidownloadmusicytb-production.up.railway.app' }
+      {
+        url: 'https://apidownloadmusicytb-production.up.railway.app', // altere para o domínio real se necessário
+      },
     ],
   },
-  apis: ['./index.js'],
+  apis: ['./index.js'], // importa os comentários do próprio arquivo
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Rota para o JSON do Swagger
-app.get('/swagger.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.send(swaggerSpec);
-});
-
-// UI do Swagger - IMPORTANTE: Colocado em um endpoint específico
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// ========== Rota de Download ==========
+// ===== Rota de Download =====
 /**
  * @swagger
  * /api/baixar:
@@ -59,7 +48,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
  *             properties:
  *               url:
  *                 type: string
- *                 example: https://www.youtube.com/watch?v=abc123
+ *                 example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
  *     responses:
  *       200:
  *         description: Arquivo mp3 do áudio
@@ -86,24 +75,22 @@ app.post('/api/baixar', (req, res) => {
   const outputFile = path.join(tempDir, `audio_${Date.now()}.mp3`);
   const cmd = `yt-dlp -x --audio-format mp3 --no-playlist -o "${outputFile}" "${url}"`;
 
-  console.log(`Iniciando download: ${url}`);
+  console.log(`🎵 Iniciando download: ${url}`);
 
   exec(cmd, (error, stdout, stderr) => {
     if (error) {
-      console.error('Erro no download:', error);
+      console.error('❌ Erro no download:', error);
       return res.status(500).json({ error: 'Erro no download do áudio' });
     }
 
-    console.log(`Download concluído: ${outputFile}`);
-    
-    // Configura os headers para download do arquivo
+    console.log(`✅ Download concluído: ${outputFile}`);
+
     res.setHeader('Content-Disposition', 'attachment; filename="musica.mp3"');
     res.setHeader('Content-Type', 'audio/mpeg');
-    
-    // Stream do arquivo para a resposta
+
     const fileStream = fs.createReadStream(outputFile);
     fileStream.pipe(res);
-    
+
     fileStream.on('close', () => {
       fs.unlink(outputFile, (err) => {
         if (err) console.error('Erro ao deletar arquivo temporário:', err);
@@ -112,8 +99,9 @@ app.post('/api/baixar', (req, res) => {
   });
 });
 
+// ===== Inicialização =====
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📘 Swagger disponível em http://localhost:${PORT}/docs`);
+  console.log(`📘 Swagger disponível em: https://SEU_DOMINIO/api-docs`);
 });
