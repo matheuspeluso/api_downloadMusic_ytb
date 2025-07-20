@@ -1,0 +1,91 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API de Download de Músicas do YouTube",
+    "description": "API para baixar músicas do YouTube"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/api/download": {
+      "post": {
+        "summary": "Iniciar download de música do YouTube",
+        "description": "Endpoint para iniciar o download de música a partir de uma URL do YouTube",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "URL do vídeo do YouTube",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Download da música iniciado com sucesso"
+          },
+          "400": {
+            "description": "URL inválida ou ausente"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/api/downloads": {
+      "get": {
+        "summary": "Listar músicas baixadas",
+        "description": "Endpoint para listar todas as músicas baixadas",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Lista de músicas baixadas"
+          },
+          "500": {
+            "description": "Erro ao listar downloads"
+          }
+        }
+      }
+    },
+    "/api/download/{filename}": {
+      "get": {
+        "summary": "Baixar arquivo específico",
+        "description": "Endpoint para baixar um arquivo específico",
+        "produces": ["audio/mpeg"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "filename",
+            "description": "Nome do arquivo a ser baixado",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Arquivo baixado com sucesso"
+          },
+          "404": {
+            "description": "Arquivo não encontrado"
+          },
+          "500": {
+            "description": "Erro ao baixar arquivo"
+          }
+        }
+      }
+    }
+  }
+}

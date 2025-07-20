@@ -1,0 +1,30 @@
+{
+  "name": "appbaixar_musica_ytb",
+  "version": "1.0.0",
+  "description": "API para baixar músicas do YouTube",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "youtube",
+    "download",
+    "music",
+    "api",
+    "yt-dlp"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
+    "youtube-dl-exec": "^2.5.8",
+    "ytdl-core": "^4.11.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
